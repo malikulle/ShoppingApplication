@@ -1,0 +1,123 @@
+﻿@model CartViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <!-- cart contents start -->
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Ürün</th>
+                        <th>Fiyat</th>
+                        <th class="qtycolumn">Quantity</th>
+                        <th>Toplam</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Cart.CartItems)
+                    {
+                        <tr name="@item.ProductId">
+                            <td><img alt="" class="img-responsive product-thumb" src="~/images/@item.Product.ImageUrl"></td>
+                            <td><a href="#">@item.Product.Name</a></td>
+                            <td>@item.Product.Currency.Symbol @item.Product.Price</td>
+                            <td>
+                                @item.Quantity
+                            </td>
+                            <td>@item.Product.Currency.Symbol @(item.Product.Price * item.Quantity)</td>
+                            <td><i  class="fa fa-times fa-fw delete-product" data-id="@item.ProductId" style="cursor: pointer;"></i></td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+    <!-- cart contents end -->
+    <!-- cart total start -->
+    <div class="col-md-4">
+        <div class="text-left">
+            <h4>CART <b>TOTALS</b></h4>
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>Cart Subtotal</th>
+                <td>₺ @Model.TotalPrice</td>
+            </tr>
+            <tr>
+                <th>Shipping</th>
+                <td>Free</td>
+            </tr>
+            <tr>
+                <th>Order Total</th>
+                <td class="ordertotal">₺ @Model.TotalPrice</td>
+            </tr>
+        </table>
+
+        <div class="text-right">
+            <a asp-controller="Carts" asp-action="Checkout" class="btn btn-primary btn-lg">Alışverişi Tamamla<i class="fa fa-arrow-circle-right fa-fw"></i></a>
+        </div>
+
+    </div>
+    <!-- cart total end -->
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $(function() {
+                $(".delete-product").click(function(event) {
+                    event.preventDefault();
+                    var id = $(this).attr("data-id");
+                    Swal.fire({
+                        title: 'Ürünü Sepetten Çıkartman İstediğinize Emin Misiniz?',
+                        text: "Ürün Sepetten Çıkartılacak.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Evet, SİL!',
+                        cancelButtonText: 'Vazgeç, SİLME!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("RemoveFromCart", "Carts")',
+                                dataType: "json",
+                                data: { productId: id },
+                                success: function(data) {
+
+                                    if (data.success) {
+                                        toastr.success("Ürün Karttan Çıkartıldı");
+                                        var tableRow = $(`[name=${id}]`);
+                                        tableRow.hide();
+                                    } else {
+                                        Swal.fire('Hata!',
+                                            'Hata Oluştu',
+                                            'error');
+                                    }
+
+                                },
+                                error: function() {
+                                    toastr.error("Bir Hata Oluştu");
+                                }
+                            });
+                        }
+                    });
+                });
+
+            });
+
+        });
+    </script>
+}

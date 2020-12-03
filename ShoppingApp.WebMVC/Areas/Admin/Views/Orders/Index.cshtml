@@ -1,0 +1,116 @@
+﻿@model ShoppingApp.WebMVC.Areas.Admin.Models.OrderViewModel
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Siparişler</li>
+</ol>
+
+<div id="modalPlaceHolder" aria-hidden="true"></div>
+
+<div class="card mb-4 mt-2">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Ürünlerim
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="ordersTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Şipariş Tarihi</th>
+                        <th>Sipariş Numarası</th>
+                        <th>Siparişi Veren</th>
+                        <th>Şehir</th>
+                        <th>Şipariş Durumu</th>
+                        <th>Ödeme Durmu</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Şipariş Tarihi</th>
+                        <th>Sipariş Numarası</th>
+                        <th>Siparişi Veren</th>
+                        <th>Şehir</th>
+                        <th>Şipariş Durumu</th>
+                        <th>Ödeme Durmu</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tr>
+                            <td>@item.OrderDate.ToShortDateString()</td>
+                            <td>@item.OrderNumber</td>
+                            <td>@item.FirstName @item.LastName</td>
+                            <td>@item.City</td>
+                            <td>@item.OrderState.ToString()</td>
+                            <td>@item.PaymentType.ToString()</td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm btn-detail" data-id="@item.Id">Detay</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('#ordersTable').DataTable({
+                language: {
+                    "sDecimal": ",",
+                    "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                    "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                    "sInfoEmpty": "Kayıt yok",
+                    "sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                    "sLoadingRecords": "Yükleniyor...",
+                    "sProcessing": "İşleniyor...",
+                    "sSearch": "Ara:",
+                    "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sLast": "Son",
+                        "sNext": "Sonraki",
+                        "sPrevious": "Önceki"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                        "sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d kayıt seçildi",
+                            "0": "",
+                            "1": "1 kayıt seçildi"
+                        }
+                    }
+                }
+
+            });
+
+            $(".btn-detail").click(function() {
+                var id = $(this).attr("data-id");
+                var placeHolderDiv = $("#modalPlaceHolder");
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetOrderItems", "Orders")',
+                    data: { OrderId: id },
+                    success: function(data) {
+                        placeHolderDiv.html(data.partialView);
+                        placeHolderDiv.find(".modal").modal("show");
+                    },
+                    error: function(err) {
+
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,149 @@
+﻿@model ProductAddDto
+@{
+    var counter = 0;
+}
+<div class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ürün Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Products" asp-action="UpdateProduct" method="post" id="form-product-update" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Product.Id"/>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Ürün Adı</label>
+                        <div class="col-md-9">
+                            <input type="text" asp-for="Product.Name" class="form-control"/>
+                            <span asp-validation-for="Product.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Ürün Resmi</label>
+                        <div class="col-md-9">
+                            <input type="hidden" id="imageUrl" asp-for="Product.ImageUrl"/>
+                            <input type="file" name="file" id="file"/>
+                            <img src="~/images/@((string) ViewBag.ImageUrl)" alt="product" height="40" width="32"/>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Fiyat</label>
+                        <div class="col-md-9">
+                            <input type="text" asp-for="Product.Price" class="form-control"/>
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Para Birimi</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="exampleFormControlSelect1" asp-for="Product.CurrencyId">
+                                @foreach (var item in (List<Currency>)ViewBag.Currencies)
+                                {
+                                    <option value="@item.Id">@item.Code-@item.Symbol</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Product.CurrencyId" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Stok</label>
+                        <div class="col-md-9">
+                            <input type="number" asp-for="Product.Stock" class="form-control"/>
+                            <span asp-validation-for="Product.Stock" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="col-md-6">
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" asp-for="Product.IsActive">
+                                <label class="form-check-label" >Aktif mi ? </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" asp-for="Product.IsFeatured">
+                                <label class="form-check-label" >Öne Çıkarılsın mi ? </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <label class="col-md-3 col-form-lavel">Açıklama</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="editor" asp-for="Product.Description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @if (Model != null)
+                        {
+                            @foreach (var item in (List<Category>) ViewBag.Categories)
+                            {
+                                var isCheced = "";
+
+                                if (Model.SelectedCategories.Any(i => i.Id == item.Id))
+                                {
+                                    isCheced = "checked";
+                                    <input type="hidden" name="SelectedCategories[@counter].Id" value="@item.Id"/>
+                                    <input type="hidden" name="SelectedCategories[@counter].Name" value="@item.Name"/>
+                                    counter++;
+
+                                }
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="categoryIds" value="@item.Id" class="custom-control-input" id="category@(item.Id)" @isCheced>
+                                    <label class="custom-control-label" for="category@(item.Id)">@item.Name</label>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal"><span class="fas fa-times"></span> Kapat</button>
+                <button type="button" class="btn btn-primary btn-block" id="btnUpdate"><span class="fas fa-save"></span> Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
+    }
+
+    function handleFileSelect(evt) {
+        var f = evt.target.files[0]; // FileList object
+        var reader = new FileReader();
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+            return function(e) {
+                var binaryData = e.target.result;
+                //Converting Binary Data to base 64
+                toBase64(f).then(function(data) {
+                    //showing file converted to base64
+                    document.getElementById('imageUrl').value = data;
+                });
+               
+            };
+        })(f);
+        // Read in the image file as a data URL.
+        reader.readAsBinaryString(f);
+    }
+
+    function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+</script>
+
+

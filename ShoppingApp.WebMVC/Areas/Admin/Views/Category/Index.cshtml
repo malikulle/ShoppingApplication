@@ -1,0 +1,345 @@
+﻿@model List<ShoppingApp.Entities.Models.Category>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="modalPlaceHolder" aria-hidden="true"></div>
+<div class="card mb-4 mt-2">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Kategoriler
+    </div>
+    <div class="card-body">
+        <div class="spinner-border" role="status" style="display: none;">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Kategori Adı</th>
+                        <th>Aktif</th>
+                        <th>Silinmiş</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Kategori Adı</th>
+                        <th>Aktif</th>
+                        <th>Silinmiş</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr name="@category.Id">
+                            <td>@category.Id</td>
+                            <td>@category.Name</td>
+                            <td>
+                                @if (@category.IsActive)
+                                {
+                                    <i class="fas fa-check text-center" style="color: green"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-times text-center" style="color: red;"></i>
+                                }
+                            </td>
+                            <td>
+                                @if (@category.IsDeleted)
+                                {
+                                    <i class="fas fa-check text-center" style="color: green"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-times text-center" style="color: red;"></i>
+                                }
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-sm btn-update" data-id="@category.Id"><span class="fas fa-minus-edit"></span>  Düzenle</button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span> Sil</button>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            var dataTable = $('#categoriesTable').DataTable({
+                dom:
+                    "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                buttons: [
+                    {
+                        text: 'Ekle',
+                        attr: {
+                            id: "btnAdd"
+                        },
+                        className: "btn btn-success",
+                        action: function(e, dt, node, config) {
+                        }
+                    },
+                    {
+                        text: 'Yenile',
+                        className: "btn btn-warning text-white",
+                        action: function(e, dt, node, config) {
+                            $.ajax({
+                                type: "GET",
+                                url: '@Url.Action("GetAllCategories", "Category")',
+                                content: "application/json",
+                                beforeSend: function() {
+                                    $("#categoriesTable").hide();
+                                    $(".spinner-border").show();
+
+                                },
+                                success: function(data) {
+                                    var categoryListDto = jQuery.parseJSON(data);
+                                    var tableBody = "";
+                                    $.each(categoryListDto.$values,
+                                        function(index, category) {
+                                            tableBody += `
+                                    <tr name="${category.Id}">
+                                        <td>${category.Id}</td>
+                                        <td>${category.Name}</td>
+                                        <td>${convertToShortDate(category.CreatedAt)}</td>
+                                        <td>
+
+                                                <i class="fas fa-check text-center" disabled=${!category.IsActive} style="color:green"></i>
+
+                                                <i class="fas fa-times text-center" disabled=${category.IsActive} style="color: red;"></i>
+                                        </td>
+                                        <td>
+                                                <i class="fas fa-check text-center" disabled=${!category.IsDeleted} style="color:green"></i>
+                                                <i class="fas fa-times text-center" disabled=${category.IsDeleted} style="color: red;"></i>
+                                        </td>
+                                        <td>
+                                                <button class="btn btn-primary btn-sm" data-id="${category.Id}"><span class="fas fa-minus-edit"></span>  Düzenle</button>
+                                                <button class="btn btn-danger btn-sm btn-delete" data-id="${category.Id}"><span class="fas fa-minus-circle"></span> Sil</button>
+                                        </td>
+                                    </tr>`;
+                                        });
+                                    $("#categoriesTable > tbody").replaceWith(tableBody);
+                                    $(".spinner-border").hide();
+                                    $("#categoriesTable").fadeIn(1500);
+                                },
+                                error: function(err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                    }
+                ],
+                language: {
+                    "sDecimal": ",",
+                    "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                    "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                    "sInfoEmpty": "Kayıt yok",
+                    "sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                    "sLoadingRecords": "Yükleniyor...",
+                    "sProcessing": "İşleniyor...",
+                    "sSearch": "Ara:",
+                    "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sLast": "Son",
+                        "sNext": "Sonraki",
+                        "sPrevious": "Önceki"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                        "sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d kayıt seçildi",
+                            "0": "",
+                            "1": "1 kayıt seçildi"
+                        }
+                    }
+                }
+            });
+
+            $(function() {
+                var url = "@Url.Action("Post", "Category")";
+                var placeHolderDiv = $("#modalPlaceHolder");
+
+                $("#btnAdd").click(function() {
+                    $.get(url).done(function(data) {
+                        placeHolderDiv.html(data);
+                        placeHolderDiv.find(".modal").modal("show");
+                    });
+                });
+
+                placeHolderDiv.on("click",
+                    "#btnSave",
+                    function(event) {
+                        event.preventDefault();
+
+                        var form = $("#form-category-add");
+                        var actionUrl = form.attr("action");
+                        var dataToSend = form.serialize();
+
+                        $.post(actionUrl, dataToSend).done(function(data) {
+                            var ajaxModel = jQuery.parseJSON(data);
+                            var newForm = $(".modal-body", ajaxModel.CategoryAddPartial);
+                            placeHolderDiv.find(".modal-body").replaceWith(newForm);
+                            var isValid = newForm.find('[name="IsValid"]').val();
+                            if (isValid) {
+                                placeHolderDiv.find(".modal").modal("hide");
+
+                                var newTableRow= dataTable.row.add([
+                                    ajaxModel.Category.Id,
+                                    ajaxModel.Category.Name,
+                                    ajaxModel.Category.IsActive,
+                                    ajaxModel.Category.IsDeleted,
+                                    `
+                                <td>
+                                    <button class="btn btn-primary btn-sm btnUpdate" data-id="${ajaxModel.Category.Id}"><span class="fas fa-edit"></span>Düzenle</button>
+                                    <button class="btn btn-danger btn-sm btnDelete" data-id="${ajaxModel.Category.Id}"><span class="fas fa-minus-circle"></span>Sil</button>
+                                </td>
+                                `
+                                ]).node();
+                                var jQueryTableRow = $(newTableRow);
+                                jQueryTableRow.attr("name", `${ajaxModel.Category.Id}`);
+                                dataTable.row(newTableRow).draw();
+                                toastr.success("Kategori Başarılı Bir Şekilde Eklenmiştir");
+                            } else {
+                                var summaryText = "";
+                                $('#validation-summary > ul > li').each(function() {
+                                    var text = $(this).text();
+                                    summaryText = `*${text}\n`;
+                                });
+                                toastr.warning(summaryText);
+                            }
+                        });
+                    });
+
+            });
+
+            $(document).on("click",
+                ".btn-delete",
+                function(event) {
+                    event.preventDefault();
+                    var id = $(this).attr("data-id");
+                    Swal.fire({
+                        title: 'Emin misiniz?',
+                        text: "Kategoriyi Silmek istediğinize Emin misiniz ?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Evet Sil!',
+                        confirmCancelText: 'Hayır!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("Delete", "Category")',
+                                dataType: "json",
+                                data: { categoryId: id },
+                                success: function() {
+                                    Swal.fire('Silindi!',
+                                        'Başarılı Bir Şekilde Kaldırıldı.',
+                                        'success');
+                                    var tableRow = $(`[name=${id}]`);
+                                    dataTable.row(tableRow).remove().draw();
+                                },
+                                error: function() {
+                                    toastr.error("Bir Hata Oluştu");
+                                }
+                            });
+
+
+                        }
+                    });
+
+                });
+
+            $(function() {
+                var placeHolderDiv = $("#modalPlaceHolder");
+
+                $(document).on("click",
+                    ".btn-update",
+                    function(event) {
+                        event.preventDefault();
+                        var id = $(this).attr("data-id");
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("Put", "Category")',
+                            data: { categoryId: id },
+                            success: function(data) {
+
+                                placeHolderDiv.html(data);
+                                placeHolderDiv.find(".modal").modal("show");
+                            },
+                            error: function(err) {
+
+                            }
+                        });
+                    });
+
+
+                placeHolderDiv.on("click",
+                    "#btnUpdate",
+                    function(event) {
+                        event.preventDefault();
+
+                        var form = $("#form-category-update");
+                        var actionUrl = form.attr("action");
+                        var dataToSend = form.serialize();
+
+                        $.post(actionUrl, dataToSend).done(function(data) {
+                            var ajaxModel = jQuery.parseJSON(data);
+                            var id = ajaxModel.Category.Id;
+                            var tableRow = $(`[name="${id}"]`);
+                            var newForm = $(".modal-body", ajaxModel.CategoryUpdatePartial);
+                            placeHolderDiv.find(".modal-body").replaceWith(newForm);
+                            var isValid = newForm.find('[name="IsValid"]').val();
+                            if (isValid !== 'False') {
+                                placeHolderDiv.find(".modal").modal("hide");
+                                dataTable.row(tableRow).data([
+                                    ajaxModel.Category.Id,
+                                    ajaxModel.Category.Name,
+                                    ajaxModel.Category.IsActive,
+                                    ajaxModel.Category.IsDeleted,
+                                    `
+                                <td>
+                                    <button class="btn btn-primary btn-sm btnUpdate" data-id="${ajaxModel.Category.Id}"><span class="fas fa-edit"></span>Düzenle</button>
+                                    <button class="btn btn-danger btn-sm btnDelete" data-id="${ajaxModel.Category.Id}"><span class="fas fa-minus-circle"></span>Sil</button>
+                                </td>
+                                `
+                                ]);
+                                tableRow.attr("name", `${id}`);
+                                dataTable.row(tableRow).invalidate();
+                                toastr.success("Kategori Başarılı Bir Şekilde Güncellenmiştir");
+                            } else {
+                                var summaryText = "";
+                                $('#validation-summary > ul > li').each(function() {
+                                    var text = $(this).text();
+                                    summaryText = `*${text}\n`;
+                                });
+                                toastr.warning(summaryText);
+                            }
+
+                        });
+                    });
+            });
+        });
+    </script>
+}

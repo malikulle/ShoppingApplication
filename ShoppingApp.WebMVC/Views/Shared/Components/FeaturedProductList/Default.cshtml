@@ -1,0 +1,19 @@
+﻿@model List<Product>
+
+<div class="widget">
+    <h4>FEATURED</h4>
+    <div class="products-list">
+        @foreach (var item in Model)
+        {
+            <div class="media">
+                <a class="media-left" asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
+                    <img alt="-" class="img-responsive product-thumb" src="~/images/@item.ImageUrl">
+                </a>
+                <div class="media-body">
+                    <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-title">@item.Name</a>
+                    <p class="product-price">@item.Currency.Symbol @item.Price</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

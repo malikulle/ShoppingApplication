@@ -1,0 +1,15 @@
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ShoppingApp.Core.deps.json
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ShoppingApp.Core.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ShoppingApp.Core.pdb
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ShoppingApp.Entities.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ShoppingApp.Entities.pdb
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.csprojAssemblyReference.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.AssemblyInfoInputs.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.AssemblyInfo.cs
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.csproj.CoreCompileInputs.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.csproj.CopyComplete
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.pdb
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\bin\Debug\net5.0\ref\ShoppingApp.Core.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ShoppingApp.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Core\obj\Debug\net5.0\ref\ShoppingApp.Core.dll

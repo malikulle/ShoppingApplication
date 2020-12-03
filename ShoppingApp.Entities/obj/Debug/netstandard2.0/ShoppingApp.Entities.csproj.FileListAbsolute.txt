@@ -1,0 +1,9 @@
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\bin\Debug\netstandard2.0\ShoppingApp.Entities.deps.json
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\bin\Debug\netstandard2.0\ShoppingApp.Entities.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\bin\Debug\netstandard2.0\ShoppingApp.Entities.pdb
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.csprojAssemblyReference.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.AssemblyInfoInputs.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.AssemblyInfo.cs
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.csproj.CoreCompileInputs.cache
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.dll
+C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Entities\obj\Debug\netstandard2.0\ShoppingApp.Entities.pdb

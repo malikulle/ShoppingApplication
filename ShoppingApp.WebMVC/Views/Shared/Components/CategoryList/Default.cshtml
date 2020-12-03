@@ -1,0 +1,11 @@
+﻿@model List<ShoppingApp.WebMVC.Models.CategoryModel>
+
+<div class="widget">
+    <h4>Kategoriler</h4>
+    <ul class="list-unstyled link-list">
+        @foreach (var item in Model)
+        {
+            <li><i class="fa fa-angle-right fa-fw" aria-hidden="true"></i> <a asp-controller="Home" asp-action="Index" asp-route-category="@item.Name">@item.Name <span class="pull-right">(@item.Count)</span></a></li>
+        }
+    </ul>
+</div>

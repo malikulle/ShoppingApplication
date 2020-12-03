@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ShoppingApp.Data</id>
+    <version>1.0.0</version>
+    <authors>ShoppingApp.Data</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETCoreApp5.0">
+        <dependency id="ShoppingApp.Core" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\malik\source\repos\ShoppingApp\ShoppingApp.Data\bin\Debug\net5.0\ShoppingApp.Data.dll" target="lib\net5.0\ShoppingApp.Data.dll" />
+  </files>
+</package>

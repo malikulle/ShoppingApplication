@@ -1,0 +1,41 @@
+﻿@model UserUpdateDto
+@{
+    ViewData["Title"] = "ChangeDetails";
+}
+
+<div class="row">
+    <div class="col-lg-6 offset-lg-3">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h4 class="text-center"><span class="fas fa-edit"></span> Profil Düzenle</h4>
+            </div>
+            <div class="card-body">
+                <form id="form-user-update" asp-action="ChangeDetails" asp-controller="Users" asp-area="Admin" method="post">
+                    <div asp-validation-summary="All" class="text-danger" id="validation-summary"></div>
+                    <input asp-for="Id" type="hidden" />
+                    
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input class="form-control" asp-for="Email" />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageUrl"></label>
+                        <input asp-for="ImageUrl" type="hidden" />
+                        <img class="my-image" src="~/profile/@Model.ImageUrl" alt="@Model.Email" width="32" height="32"  />
+
+                    </div>
+                    <div class="form-group">
+                        <label>Resim</label>
+                        <input type="file" class="form-control" asp-for="PictureFile" />
+                        <span class="text-danger" asp-validation-for="PictureFile"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"><span class="fas fa-save"></span> Kaydet</button>
+                        <a class="btn btn-danger btn-block" asp-area="Admin" asp-controller="Home" asp-action="Index"><span class="fas fa-times"></span> İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

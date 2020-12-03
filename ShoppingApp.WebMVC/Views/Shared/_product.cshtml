@@ -1,0 +1,18 @@
+﻿@model Product
+
+<div class="col-md-4 wow fadeInUp">
+    <div class="text-center product-item">
+        <div class="product-item-top">
+            <img alt="" class="img-responsive" src="~/images/@Model.ImageUrl">
+            <div class="mask"></div>
+            <ul class="list-unstyled list-inline">
+                <li><a asp-controller="Product" asp-action="Detail" asp-route-id="@Model.Id" ><i class="fa fa-link fa-fw"></i></a></li>
+                <li><a asp-controller="Carts" asp-action="AddToCart" asp-route-productId="@Model.Id"><i class="fa fa-cart-plus fa-fw"></i></a></li>
+            </ul>
+        </div>
+        <div class="product-item-inner">
+            <h3 class="product-title"><a href="#">@Model.Name</a></h3>
+            <p class="product-price">@Model.Currency.Symbol @Model.Price</p>
+        </div>
+    </div>
+</div>

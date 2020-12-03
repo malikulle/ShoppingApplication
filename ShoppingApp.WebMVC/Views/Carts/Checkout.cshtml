@@ -1,0 +1,124 @@
+﻿@model OrderModel
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Checkout</h2>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <h4 class="mb-4">Sipariş Detay</h4>
+        <form asp-controller="Carts" asp-action="Checkout" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Adınız</label>
+                    <input type="text" asp-for="@Model.FirstName" name="firstName"  class="form-control" />
+                    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Soyadınız</label>
+                    <input asp-for="@Model.LastName" type="text" name="lastName"class="form-control" />
+                    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Address</label>
+                <textarea asp-for="@Model.Address" name="address" class="form-control"></textarea>
+                <span asp-validation-for="@Model.Address" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Şehir</label>
+                    <input asp-for="@Model.City" type="text" name="city" class="form-control" />
+                    <span asp-validation-for="@Model.City" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Telefon</label>
+                    <input asp-for="@Model.Phone" type="text" name="phone" class="form-control" />
+                    <span asp-validation-for="@Model.Phone" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Email</label>
+                    <input asp-for="@Model.Email" type="email" name="email" class="form-control" />
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <hr class="mb-4" />
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input">
+                <label class="form-check-label" for="exampleCheck1">Bilgilerinizi Kayıt Edin</label>
+            </div>
+            <hr class="mb-4" />
+            <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                    <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
+                    <label class="custom-control-label" for="credit">Credit card</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                    <label class="custom-control-label" for="eft">EFT</label>
+                </div>
+            </div>
+            <h4 class="mb-4">Ödeme</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Name on Credit Card</label>
+                    <input type="text" class="form-control" asp-for="@Model.CardName" />
+                    <span asp-validation-for="@Model.CardName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Credit Card Number</label>
+                    <input asp-for="@Model.CardNumber" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.CardNumber" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Ay</label>
+                    <input type="text"   class="form-control" asp-for="ExpirationMonth" />
+                    <span asp-validation-for="ExpirationMonth" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Yıl</label>
+                    <input type="text" class="form-control" asp-for="ExpirationYear" />
+                    <span asp-validation-for="ExpirationYear" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>CVV</label>
+                    <input type="text" name="cvv"  class="form-control" asp-for="Cvv" />
+                    <span asp-validation-for="Cvv" class="text-danger"></span>
+                </div>
+            </div>
+            <hr class="mb-4" />
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Alışverişi Tamamla</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <h4 mb-3>
+            <span class="text-muted">Sepetiniz</span>
+        </h4>
+        <ul class="list-group mb-3">
+            @foreach (var item in Model.CartModel.Cart.CartItems)
+            {
+                <li class="list-group-item d-flex justify-content-between">
+                    <h6 class="my-0">
+                        @item.Product.Name
+                        <small>x @item.Quantity</small>
+                    </h6>
+                    <span class="text-muted">@item.Product.Currency.Symbol @item.Product.Price</span>
+                </li>
+            }
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total (TL) :</span>
+                <strong>@Model.CartModel.TotalPrice</strong>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+
